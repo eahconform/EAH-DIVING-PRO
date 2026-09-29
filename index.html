@@ -1,1 +1,5659 @@
+<!DOCTYPE html>
 
+<html lang="fr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>EAH DIVING PRO</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+
+  --blue: #0068ff;
+
+  --deep: #061a33;
+
+  --deep2: #0c2748;
+
+  --white: #ffffff;
+
+  --light: #f3f8ff;
+
+  --grey: #7c8da3;
+
+  --border: #dce7f5;
+
+  --success: #18a86b;
+
+  --danger: #df4761;
+
+  --warning: #f0a72e;
+
+}
+
+body {
+
+  margin: 0;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(0,104,255,.16),
+      transparent 34%
+    ),
+    linear-gradient(
+      180deg,
+      #f8fbff 0%,
+      #edf5ff 100%
+    );
+
+  color: var(--deep);
+
+  min-height: 100vh;
+
+}
+
+button,
+input,
+select,
+textarea {
+
+  font: inherit;
+
+}
+
+button {
+
+  cursor: pointer;
+
+}
+
+.hidden {
+
+  display: none !important;
+
+}
+
+header {
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 30;
+
+  backdrop-filter: blur(16px);
+
+  background:
+    rgba(255,255,255,.88);
+
+  border-bottom:
+    1px solid rgba(220,231,245,.9);
+
+}
+
+.nav {
+
+  max-width: 1300px;
+
+  margin: auto;
+
+  min-height: 74px;
+
+  padding:
+    12px
+    22px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+}
+
+.brand {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  font-weight: 900;
+
+  letter-spacing: .04em;
+
+}
+
+.logo {
+
+  width: 44px;
+
+  height: 44px;
+
+  border-radius: 15px;
+
+  display: grid;
+
+  place-items: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #07264c,
+      #0068ff
+    );
+
+  color: white;
+
+  box-shadow:
+    0 10px 28px
+    rgba(0,104,255,.25);
+
+}
+
+.nav-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+
+}
+
+.container {
+
+  width:
+    min(
+      1300px,
+      calc(100% - 28px)
+    );
+
+  margin: 30px auto 70px;
+
+}
+
+.hero {
+
+  border-radius: 34px;
+
+  padding:
+    clamp(
+      38px,
+      7vw,
+      86px
+    );
+
+  min-height: 460px;
+
+  display: flex;
+
+  align-items: center;
+
+  color: white;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+
+    radial-gradient(
+      circle at 90% 20%,
+      rgba(78,176,255,.5),
+      transparent 30%
+    ),
+
+    radial-gradient(
+      circle at 20% 90%,
+      rgba(0,104,255,.42),
+      transparent 34%
+    ),
+
+    linear-gradient(
+      135deg,
+      #03182d 0%,
+      #0a3265 55%,
+      #0068ff 120%
+    );
+
+  box-shadow:
+    0 25px 70px
+    rgba(6,26,51,.22);
+
+}
+
+.hero-content {
+
+  max-width: 800px;
+
+  position: relative;
+
+  z-index: 2;
+
+}
+
+.hero h1 {
+
+  margin: 0;
+
+  font-size:
+    clamp(
+      42px,
+      8vw,
+      86px
+    );
+
+  line-height: .95;
+
+  letter-spacing: -.045em;
+
+}
+
+.hero p {
+
+  max-width: 700px;
+
+  font-size: 19px;
+
+  line-height: 1.6;
+
+  opacity: .86;
+
+}
+
+.badge-pro {
+
+  display: inline-flex;
+
+  border-radius: 999px;
+
+  padding:
+    8px
+    13px;
+
+  background:
+    rgba(255,255,255,.13);
+
+  border:
+    1px solid
+    rgba(255,255,255,.23);
+
+  margin-bottom: 22px;
+
+  font-size: 12px;
+
+  font-weight: 900;
+
+  letter-spacing: .13em;
+
+}
+
+.grid {
+
+  display: grid;
+
+  gap: 18px;
+
+}
+
+.grid-2 {
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
+
+}
+
+.grid-3 {
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0,1fr)
+    );
+
+}
+
+.card {
+
+  background:
+    rgba(255,255,255,.93);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 24px;
+
+  padding: 24px;
+
+  box-shadow:
+    0 10px 32px
+    rgba(8,39,76,.06);
+
+}
+
+.card h2,
+.card h3 {
+
+  margin-top: 0;
+
+}
+
+.auth-wrap {
+
+  max-width: 570px;
+
+  margin: 38px auto;
+
+}
+
+label {
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  display: block;
+
+  margin-bottom: 7px;
+
+}
+
+.field {
+
+  margin-bottom: 15px;
+
+}
+
+input,
+select,
+textarea {
+
+  width: 100%;
+
+  border-radius: 13px;
+
+  border:
+    1px solid
+    #cbd9e9;
+
+  background: white;
+
+  padding:
+    12px
+    13px;
+
+  color:
+    var(--deep);
+
+  outline: none;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+
+  border-color:
+    #458dff;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(0,104,255,.09);
+
+}
+
+textarea {
+
+  min-height: 100px;
+
+  resize: vertical;
+
+}
+
+.btn {
+
+  border: none;
+
+  border-radius: 13px;
+
+  padding:
+    11px
+    17px;
+
+  font-weight: 850;
+
+  background:
+    #eaf2fd;
+
+  color:
+    #0b3260;
+
+}
+
+.btn-primary {
+
+  background:
+    linear-gradient(
+      135deg,
+      #0068ff,
+      #0050c8
+    );
+
+  color: white;
+
+  box-shadow:
+    0 8px 22px
+    rgba(0,104,255,.20);
+
+}
+
+.btn-dark {
+
+  background:
+    var(--deep);
+
+  color: white;
+
+}
+
+.btn-danger {
+
+  background:
+    #ffe8ed;
+
+  color:
+    #be2642;
+
+}
+
+.btn-success {
+
+  background:
+    #e1f8ee;
+
+  color:
+    #0a8050;
+
+}
+
+.status {
+
+  border-radius: 13px;
+
+  padding:
+    12px
+    14px;
+
+  font-size: 14px;
+
+  margin: 14px 0;
+
+  background:
+    #edf5ff;
+
+}
+
+.status.error {
+
+  background:
+    #ffe9ee;
+
+  color:
+    #a91f3a;
+
+}
+
+.status.success {
+
+  background:
+    #e3faef;
+
+  color:
+    #087546;
+
+}
+
+.tabs {
+
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+
+  margin-bottom: 20px;
+
+}
+
+.tab-btn {
+
+  border: 0;
+
+  border-radius: 999px;
+
+  padding:
+    10px
+    15px;
+
+  background:
+    white;
+
+  color:
+    #45627f;
+
+  font-weight: 800;
+
+  border:
+    1px solid
+    var(--border);
+
+}
+
+.tab-btn.active {
+
+  background:
+    var(--deep);
+
+  color:
+    white;
+
+}
+
+.metric {
+
+  border-radius: 21px;
+
+  padding: 22px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #09284e,
+      #0c4b96
+    );
+
+}
+
+.metric .number {
+
+  font-size: 38px;
+
+  font-weight: 950;
+
+  line-height: 1;
+
+  margin-top: 8px;
+
+}
+
+.muted {
+
+  color:
+    var(--grey);
+
+}
+
+.small {
+
+  font-size: 12px;
+
+}
+
+.athlete-card {
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 20px;
+
+  padding: 16px;
+
+  display: flex;
+
+  gap: 15px;
+
+  align-items: center;
+
+  background: white;
+
+}
+
+.avatar {
+
+  width: 68px;
+
+  height: 68px;
+
+  border-radius: 20px;
+
+  object-fit: cover;
+
+  background:
+    #e9f2fd;
+
+  flex-shrink: 0;
+
+}
+
+.avatar.large {
+
+  width: 120px;
+
+  height: 120px;
+
+  border-radius: 30px;
+
+}
+
+.athlete-info {
+
+  min-width: 0;
+
+  flex: 1;
+
+}
+
+.athlete-info strong {
+
+  display: block;
+
+  font-size: 17px;
+
+}
+
+.code {
+
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+
+  color:
+    #0068ff;
+
+  font-weight: 900;
+
+}
+
+.criteria {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0,1fr)
+    );
+
+  gap: 16px;
+
+}
+
+.criteria-group {
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 20px;
+
+  padding: 18px;
+
+  background:
+    #fbfdff;
+
+}
+
+.criteria-group h3 {
+
+  margin:
+    0
+    0
+    15px;
+
+}
+
+.criteria-row {
+
+  margin-bottom: 12px;
+
+}
+
+.criteria-row label {
+
+  line-height: 1.35;
+
+}
+
+.score-box {
+
+  margin-top: 15px;
+
+  border-radius: 14px;
+
+  padding:
+    12px
+    15px;
+
+  background:
+    var(--deep);
+
+  color: white;
+
+  display: flex;
+
+  justify-content:
+    space-between;
+
+  font-weight: 900;
+
+}
+
+.score-total {
+
+  font-size: 28px;
+
+}
+
+.table-wrap {
+
+  overflow-x: auto;
+
+}
+
+table {
+
+  border-collapse: collapse;
+
+  width: 100%;
+
+}
+
+th,
+td {
+
+  text-align: left;
+
+  padding:
+    12px
+    10px;
+
+  border-bottom:
+    1px solid
+    var(--border);
+
+  white-space: nowrap;
+
+}
+
+th {
+
+  font-size: 12px;
+
+  color:
+    #67809a;
+
+  text-transform: uppercase;
+
+  letter-spacing: .06em;
+
+}
+
+.pill {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  border-radius: 999px;
+
+  padding:
+    6px
+    10px;
+
+  background:
+    #ecf4ff;
+
+  color:
+    #0759c9;
+
+  font-size: 12px;
+
+  font-weight: 900;
+
+}
+
+.badge-card {
+
+  text-align: center;
+
+  padding: 22px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #071d39,
+      #0d417a
+    );
+
+  color: white;
+
+  min-height: 135px;
+
+  display: grid;
+
+  place-items: center;
+
+}
+
+.badge-card strong {
+
+  font-size: 19px;
+
+  letter-spacing: .08em;
+
+}
+
+.public-header {
+
+  display: flex;
+
+  gap: 25px;
+
+  align-items: center;
+
+}
+
+.public-score {
+
+  font-size: 42px;
+
+  font-weight: 950;
+
+  color:
+    #0068ff;
+
+}
+
+.eval-public {
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius: 20px;
+
+  padding: 20px;
+
+  margin-bottom: 15px;
+
+  background: white;
+
+}
+
+.section-title {
+
+  display: flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap: 12px;
+
+  margin:
+    4px
+    0
+    18px;
+
+}
+
+.section-title h2 {
+
+  margin: 0;
+
+}
+
+.inline-actions {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+}
+
+hr {
+
+  border: 0;
+
+  border-top:
+    1px solid
+    var(--border);
+
+  margin:
+    22px
+    0;
+
+}
+
+@media (max-width: 900px) {
+
+  .grid-2,
+  .grid-3,
+  .criteria {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+  .public-header {
+
+    align-items:
+      flex-start;
+
+  }
+
+}
+
+@media (max-width: 620px) {
+
+  .container {
+
+    width:
+      min(
+        100% - 18px,
+        1300px
+      );
+
+    margin-top: 15px;
+
+  }
+
+  .card {
+
+    padding: 18px;
+
+    border-radius: 20px;
+
+  }
+
+  .hero {
+
+    min-height: 390px;
+
+    border-radius: 24px;
+
+    padding: 30px 22px;
+
+  }
+
+  .public-header {
+
+    flex-direction: column;
+
+  }
+
+  header .brand span:last-child {
+
+    display: none;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+  <div class="nav">
+
+    <div class="brand">
+
+      <div class="logo">
+        EAH
+      </div>
+
+      <span>
+        EAH DIVING PRO
+      </span>
+
+    </div>
+
+    <div class="nav-actions">
+
+      <span
+        id="currentClub"
+        class="small muted"
+      ></span>
+
+      <button
+        id="logoutButton"
+        class="btn hidden"
+      >
+        Déconnexion
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+<main class="container">
+
+<!-- ====================================================== -->
+<!-- PUBLIC PROFILE -->
+<!-- ====================================================== -->
+
+<section
+  id="publicProfileView"
+  class="hidden"
+>
+
+  <button
+    class="btn"
+    onclick="goHome()"
+  >
+    ← Retour
+  </button>
+
+  <div
+    id="publicProfileContent"
+    style="margin-top:20px"
+  ></div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- GUEST -->
+<!-- ====================================================== -->
+
+<section id="guestView">
+
+  <div class="hero">
+
+    <div class="hero-content">
+
+      <div class="badge-pro">
+        EAH DIVING PRO
+      </div>
+
+      <h1>
+        Diving.
+        <br>
+        Measured differently.
+      </h1>
+
+      <p>
+
+        Gestion des plongeurs,
+        Grade Reports,
+        profils NFC,
+        suivi des performances,
+        notation EAH et blasons.
+
+      </p>
+
+      <div class="inline-actions">
+
+        <button
+          class="btn btn-primary"
+          onclick="showAuth('login')"
+        >
+          Connexion coach
+        </button>
+
+        <button
+          class="btn"
+          onclick="showAuth('signup')"
+        >
+          Créer un espace club
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div
+    id="authArea"
+    class="auth-wrap hidden"
+  >
+
+    <div
+      id="authMessage"
+      class="status hidden"
+    ></div>
+
+    <!-- LOGIN -->
+
+    <div
+      id="loginCard"
+      class="card"
+    >
+
+      <h2>
+        Connexion
+      </h2>
+
+      <form id="loginForm">
+
+        <div class="field">
+
+          <label>
+            Adresse e-mail
+          </label>
+
+          <input
+            id="loginEmail"
+            type="email"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Mot de passe
+          </label>
+
+          <input
+            id="loginPassword"
+            type="password"
+            required
+          >
+
+        </div>
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+        >
+          Se connecter
+        </button>
+
+      </form>
+
+      <hr>
+
+      <button
+        class="btn"
+        onclick="showAuth('signup')"
+      >
+        Créer un club
+      </button>
+
+    </div>
+
+    <!-- SIGNUP -->
+
+    <div
+      id="signupCard"
+      class="card hidden"
+    >
+
+      <h2>
+        Créer EAH DIVING PRO
+      </h2>
+
+      <form id="signupForm">
+
+        <div class="field">
+
+          <label>
+            Nom du club
+          </label>
+
+          <input
+            id="signupClub"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Nom du responsable
+          </label>
+
+          <input
+            id="signupName"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Adresse e-mail
+          </label>
+
+          <input
+            id="signupEmail"
+            type="email"
+            required
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Mot de passe
+          </label>
+
+          <input
+            id="signupPassword"
+            type="password"
+            minlength="8"
+            required
+          >
+
+        </div>
+
+        <button
+          class="btn btn-primary"
+          type="submit"
+        >
+          Créer l'espace club
+        </button>
+
+      </form>
+
+      <hr>
+
+      <button
+        class="btn"
+        onclick="showAuth('login')"
+      >
+        J'ai déjà un compte
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- APPLICATION -->
+<!-- ====================================================== -->
+
+<section
+  id="appView"
+  class="hidden"
+>
+
+  <div class="tabs">
+
+    <button
+      class="tab-btn active"
+      data-tab="dashboard"
+    >
+      Tableau de bord
+    </button>
+
+    <button
+      class="tab-btn"
+      data-tab="athletes"
+    >
+      Plongeurs
+    </button>
+
+    <button
+      class="tab-btn"
+      data-tab="evaluation"
+    >
+      Nouvelle évaluation
+    </button>
+
+    <button
+      class="tab-btn"
+      data-tab="history"
+    >
+      Historique
+    </button>
+
+  </div>
+
+  <!-- ==================================================== -->
+  <!-- DASHBOARD -->
+  <!-- ==================================================== -->
+
+  <section
+    id="tab-dashboard"
+    class="tab-section"
+  >
+
+    <div class="grid grid-3">
+
+      <div class="metric">
+
+        <div>
+          Plongeurs
+        </div>
+
+        <div
+          class="number"
+          id="metricAthletes"
+        >
+          0
+        </div>
+
+      </div>
+
+      <div class="metric">
+
+        <div>
+          Évaluations
+        </div>
+
+        <div
+          class="number"
+          id="metricEvaluations"
+        >
+          0
+        </div>
+
+      </div>
+
+      <div class="metric">
+
+        <div>
+          Blasons attribués
+        </div>
+
+        <div
+          class="number"
+          id="metricBadges"
+        >
+          0
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="card"
+      style="margin-top:20px"
+    >
+
+      <h2>
+        EAH DIVING PRO
+      </h2>
+
+      <p class="muted">
+
+        Crée tes plongeurs,
+        programme leur carte NFC avec leur lien public,
+        évalue leurs plongeons
+        et suis automatiquement leur progression.
+
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- ATHLETES -->
+  <!-- ==================================================== -->
+
+  <section
+    id="tab-athletes"
+    class="tab-section hidden"
+  >
+
+    <div class="grid grid-2">
+
+      <div class="card">
+
+        <h2>
+          Ajouter un plongeur
+        </h2>
+
+        <form id="athleteForm">
+
+          <div class="grid grid-2">
+
+            <div class="field">
+
+              <label>
+                Prénom
+              </label>
+
+              <input
+                id="athleteFirstName"
+                required
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label>
+                Nom
+              </label>
+
+              <input
+                id="athleteLastName"
+                required
+              >
+
+            </div>
+
+          </div>
+
+          <div class="grid grid-2">
+
+            <div class="field">
+
+              <label>
+                Sexe
+              </label>
+
+              <select id="athleteGender">
+
+                <option value="">
+                  Non renseigné
+                </option>
+
+                <option value="F">
+                  Femme
+                </option>
+
+                <option value="M">
+                  Homme
+                </option>
+
+                <option value="X">
+                  Autre / non renseigné
+                </option>
+
+              </select>
+
+            </div>
+
+            <div class="field">
+
+              <label>
+                Date de naissance
+              </label>
+
+              <input
+                id="athleteBirthDate"
+                type="date"
+              >
+
+            </div>
+
+          </div>
+
+          <div class="field">
+
+            <label>
+              Photo
+            </label>
+
+            <input
+              id="athletePhoto"
+              type="file"
+              accept="image/*"
+            >
+
+          </div>
+
+          <button
+            class="btn btn-primary"
+            type="submit"
+          >
+            Créer le plongeur
+          </button>
+
+        </form>
+
+        <div
+          id="athleteMessage"
+          class="status hidden"
+        ></div>
+
+      </div>
+
+      <div class="card">
+
+        <div class="section-title">
+
+          <h2>
+            Mes plongeurs
+          </h2>
+
+          <span
+            id="athleteCount"
+            class="pill"
+          >
+            0
+          </span>
+
+        </div>
+
+        <div id="athletesList"></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- EVALUATION -->
+  <!-- ==================================================== -->
+
+  <section
+    id="tab-evaluation"
+    class="tab-section hidden"
+  >
+
+    <form id="evaluationForm">
+
+      <div class="card">
+
+        <h2>
+          Identification du plongeon
+        </h2>
+
+        <div class="grid grid-3">
+
+          <div class="field">
+
+            <label>
+              Plongeur
+            </label>
+
+            <select
+              id="evalAthlete"
+              required
+            ></select>
+
+          </div>
+
+          <div class="field">
+
+            <label>
+              Discipline
+            </label>
+
+            <select
+              id="evalDiscipline"
+              required
+            >
+
+              <option value="OLYMPIC">
+                Plongeon olympique
+              </option>
+
+              <option value="HIGH_DIVING">
+                High Diving
+              </option>
+
+              <option value="FREESTYLE">
+                Freestyle
+              </option>
+
+              <option value="DODS">
+                Dods
+              </option>
+
+              <option value="ANGE">
+                Saut de l'ange
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="field">
+
+            <label>
+              Code du plongeon
+            </label>
+
+            <input
+              id="evalDiveCode"
+              placeholder="Ex : 5152B"
+              required
+            >
+
+          </div>
+
+        </div>
+
+        <div class="grid grid-3">
+
+          <div class="field">
+
+            <label>
+              Nom du plongeon
+            </label>
+
+            <input id="evalDiveName">
+
+          </div>
+
+          <div class="field">
+
+            <label>
+              Groupe EAH
+            </label>
+
+            <select id="evalGroup">
+
+              <option value="">
+                -
+              </option>
+
+              <option value="1">
+                Groupe 1
+              </option>
+
+              <option value="2">
+                Groupe 2
+              </option>
+
+              <option value="3">
+                Groupe 3
+              </option>
+
+              <option value="4">
+                Groupe 4
+              </option>
+
+              <option value="5">
+                Groupe 5
+              </option>
+
+              <option value="6">
+                Groupe 6
+              </option>
+
+              <option value="7">
+                Groupe 7 — mouvements spéciaux
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="field">
+
+            <label>
+              Support
+            </label>
+
+            <select id="evalSupport">
+
+              <option value="">
+                -
+              </option>
+
+              <option value="SB">
+                Tremplin
+              </option>
+
+              <option value="PF">
+                Plateforme
+              </option>
+
+              <option value="CLIFF">
+                Falaise / High Dive
+              </option>
+
+              <option value="OTHER">
+                Autre
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="grid grid-3">
+
+          <div class="field">
+
+            <label>
+              Hauteur
+            </label>
+
+            <input
+              id="evalHeight"
+              type="number"
+              min="0"
+              max="100"
+              step="0.1"
+              placeholder="Ex : 10"
+            >
+
+          </div>
+
+          <div class="field">
+
+            <label>
+              Position
+            </label>
+
+            <select id="evalPosition">
+
+              <option value="">
+                -
+              </option>
+
+              <option value="A">
+                A
+              </option>
+
+              <option value="B">
+                B
+              </option>
+
+              <option value="C">
+                C
+              </option>
+
+              <option value="D">
+                D
+              </option>
+
+              <option value="E">
+                E
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="field">
+
+            <label>
+              Bande
+            </label>
+
+            <select id="evalBand">
+
+              <option value="">
+                -
+              </option>
+
+              <option value="H1">
+                H1
+              </option>
+
+              <option value="H2">
+                H2
+              </option>
+
+              <option value="H3">
+                H3
+              </option>
+
+              <option value="H4">
+                H4
+              </option>
+
+              <option value="H5">
+                H5
+              </option>
+
+              <option value="H6">
+                H6
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="grid grid-3">
+
+          <div class="field">
+
+            <label>
+              DD
+            </label>
+
+            <input
+              id="evalDD"
+              type="number"
+              min="0"
+              step="0.1"
+            >
+
+          </div>
+
+          <div class="field">
+
+            <label>
+              Difficulté EAH
+            </label>
+
+            <select id="evalDifficulty">
+
+              <option value="">
+                -
+              </option>
+
+              <option value="1">
+                Niveau 1
+              </option>
+
+              <option value="2">
+                Niveau 2
+              </option>
+
+              <option value="3">
+                Niveau 3
+              </option>
+
+              <option value="4">
+                Niveau 4
+              </option>
+
+              <option value="5">
+                Niveau 5
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="field">
+
+            <label>
+              Note globale coach /10
+            </label>
+
+            <input
+              id="evalCoachScore"
+              type="number"
+              min="0"
+              max="10"
+              step="0.1"
+            >
+
+          </div>
+
+        </div>
+
+        <div class="grid grid-2">
+
+          <label>
+
+            <input
+              id="evalHeightEstimated"
+              type="checkbox"
+              style="width:auto"
+            >
+
+            Hauteur approximative / estimée
+
+          </label>
+
+          <label>
+
+            <input
+              id="evalConform"
+              type="checkbox"
+              style="width:auto"
+            >
+
+            Plongeon conforme
+
+          </label>
+
+        </div>
+
+      </div>
+
+      <div
+        class="criteria"
+        style="margin-top:18px"
+      >
+
+        <!-- TAKEOFF -->
+
+        <div class="criteria-group">
+
+          <h3>
+            TAKEOFF
+          </h3>
+
+          <div class="criteria-row">
+
+            <label>
+              D1 — Coordination / élan
+              si applicable
+            </label>
+
+            <select
+              class="score-input takeoff-score"
+              id="d1"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              D2 — Impulsion / détente /
+              élévation
+            </label>
+
+            <select
+              class="score-input takeoff-score"
+              id="d2"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              D3 — Trajectoire /
+              verticalité
+            </label>
+
+            <select
+              class="score-input takeoff-score"
+              id="d3"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              D4 — Temps de fixation
+            </label>
+
+            <select
+              class="score-input takeoff-score"
+              id="d4"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              D5 — Amplitude des bras
+            </label>
+
+            <select
+              class="score-input takeoff-score"
+              id="d5"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="score-box">
+
+            <span>
+              Takeoff
+            </span>
+
+            <span id="takeoffPreview">
+              0 / 10
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- TRICK -->
+
+        <div class="criteria-group">
+
+          <h3>
+            TRICK
+          </h3>
+
+          <div class="criteria-row">
+
+            <label>
+              T1 — Vitesse des rotations
+            </label>
+
+            <select
+              class="score-input trick-score"
+              id="t1"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              T2 — Saltos et/ou vrilles
+              contrôlés
+            </label>
+
+            <select
+              class="score-input trick-score"
+              id="t2"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              T3 — Ligne / tenue /
+              position du corps
+            </label>
+
+            <select
+              class="score-input trick-score"
+              id="t3"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              T4 — Ouverture si applicable
+            </label>
+
+            <select
+              class="score-input trick-score"
+              id="t4"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              T5 — Continuité / rythme
+            </label>
+
+            <select
+              class="score-input trick-score"
+              id="t5"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="score-box">
+
+            <span>
+              Trick
+            </span>
+
+            <span id="trickPreview">
+              0 / 10
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- ENTRY -->
+
+        <div class="criteria-group">
+
+          <h3>
+            ENTRY
+          </h3>
+
+          <div class="criteria-row">
+
+            <label>
+              E1 — Angle vertical
+              si applicable
+            </label>
+
+            <select
+              class="score-input entry-score"
+              id="e1"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              E2 — Éclaboussures
+            </label>
+
+            <select
+              class="score-input entry-score"
+              id="e2"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              E3 — Position des bras
+            </label>
+
+            <select
+              class="score-input entry-score"
+              id="e3"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              E4 — Jambes tendues /
+              serrées
+            </label>
+
+            <select
+              class="score-input entry-score"
+              id="e4"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="criteria-row">
+
+            <label>
+              E5 — Axe d'entrée
+            </label>
+
+            <select
+              class="score-input entry-score"
+              id="e5"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+
+          </div>
+
+          <div class="score-box">
+
+            <span>
+              Entry
+            </span>
+
+            <span id="entryPreview">
+              0 / 10
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div
+        class="card"
+        style="margin-top:18px"
+      >
+
+        <div class="grid grid-2">
+
+          <div>
+
+            <label>
+              Vidéo
+            </label>
+
+            <input
+              id="evalVideo"
+              type="file"
+              accept="video/*"
+            >
+
+          </div>
+
+          <div>
+
+            <label>
+
+              <input
+                id="evalPublic"
+                type="checkbox"
+                checked
+                style="width:auto"
+              >
+
+              Afficher cette évaluation
+              sur le profil public
+
+            </label>
+
+          </div>
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Commentaire / synthèse
+          </label>
+
+          <textarea
+            id="evalComments"
+            placeholder="Commentaires de l'évaluateur..."
+          ></textarea>
+
+        </div>
+
+        <div class="score-box">
+
+          <span>
+            NOTE EAH
+          </span>
+
+          <span
+            id="eahPreview"
+            class="score-total"
+          >
+            0.0 / 10
+          </span>
+
+        </div>
+
+        <div style="margin-top:18px">
+
+          <button
+            class="btn btn-primary"
+            type="submit"
+          >
+            Enregistrer l'évaluation
+          </button>
+
+        </div>
+
+        <div
+          id="evaluationMessage"
+          class="status hidden"
+        ></div>
+
+      </div>
+
+    </form>
+
+  </section>
+
+  <!-- ==================================================== -->
+  <!-- HISTORY -->
+  <!-- ==================================================== -->
+
+  <section
+    id="tab-history"
+    class="tab-section hidden"
+  >
+
+    <div class="card">
+
+      <div class="section-title">
+
+        <h2>
+          Historique des évaluations
+        </h2>
+
+        <button
+          class="btn"
+          onclick="loadEvaluations()"
+        >
+          Actualiser
+        </button>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Date
+              </th>
+
+              <th>
+                Plongeur
+              </th>
+
+              <th>
+                Plongeon
+              </th>
+
+              <th>
+                EAH
+              </th>
+
+              <th>
+                Takeoff
+              </th>
+
+              <th>
+                Trick
+              </th>
+
+              <th>
+                Entry
+              </th>
+
+              <th>
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="evaluationsTable"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+</main>
+
+<script>
+
+// ============================================================
+// CONFIGURATION EAH DIVING PRO
+// ============================================================
+
+// COLLE ICI TON URL SUPABASE
+const SUPABASE_URL =
+  "https://spsstnimxqijdboracxv.supabase.co";
+
+// COLLE ICI UNIQUEMENT TA CLE PUBLIQUE / PUBLISHABLE
+// JAMAIS LA CLE SERVICE_ROLE
+const SUPABASE_KEY =
+  "sb_publishable__aFfoO9ygSfNjvKBHTWAMg_rpqyE7j5";
+
+// ============================================================
+// INITIALISATION SUPABASE
+// ============================================================
+
+const sb =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
+  );
+
+// ============================================================
+// VARIABLES
+// ============================================================
+
+let session = null;
+
+let currentProfile = null;
+
+let currentClub = null;
+
+let athletes = [];
+
+let evaluations = [];
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+function el(id) {
+
+  return document.getElementById(id);
+
+}
+
+function value(id) {
+
+  return el(id).value;
+
+}
+
+function nullable(valueToCheck) {
+
+  if (
+    valueToCheck === "" ||
+    valueToCheck === undefined ||
+    valueToCheck === null
+  ) {
+
+    return null;
+
+  }
+
+  return valueToCheck;
+
+}
+
+function numberOrNull(v) {
+
+  if (
+    v === "" ||
+    v === undefined ||
+    v === null
+  ) {
+
+    return null;
+
+  }
+
+  const n =
+    Number(v);
+
+  return Number.isFinite(n)
+    ? n
+    : null;
+
+}
+
+function safe(text) {
+
+  return String(
+    text ?? ""
+  )
+  .replaceAll(
+    "&",
+    "&amp;"
+  )
+  .replaceAll(
+    "<",
+    "&lt;"
+  )
+  .replaceAll(
+    ">",
+    "&gt;"
+  )
+  .replaceAll(
+    '"',
+    "&quot;"
+  )
+  .replaceAll(
+    "'",
+    "&#039;"
+  );
+
+}
+
+function setMessage(
+  id,
+  text,
+  type = ""
+) {
+
+  const box =
+    el(id);
+
+  box.textContent =
+    text;
+
+  box.className =
+    "status";
+
+  if (type) {
+
+    box.classList.add(
+      type
+    );
+
+  }
+
+  box.classList.remove(
+    "hidden"
+  );
+
+}
+
+function hideMessage(id) {
+
+  el(id).classList.add(
+    "hidden"
+  );
+
+}
+
+function formatDate(dateValue) {
+
+  if (!dateValue) {
+    return "-";
+  }
+
+  return new Date(
+    dateValue
+  )
+  .toLocaleDateString(
+    "fr-FR",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }
+  );
+
+}
+
+function makePublicUrl(code) {
+
+  const url =
+    new URL(
+      window.location.href
+    );
+
+  url.search = "";
+
+  url.searchParams.set(
+    "profile",
+    code
+  );
+
+  return url.toString();
+
+}
+
+function goHome() {
+
+  const url =
+    new URL(
+      window.location.href
+    );
+
+  url.search = "";
+
+  window.location.href =
+    url.toString();
+
+}
+
+// ============================================================
+// AUTH UI
+// ============================================================
+
+function showAuth(mode) {
+
+  el("authArea")
+    .classList
+    .remove("hidden");
+
+  if (mode === "signup") {
+
+    el("signupCard")
+      .classList
+      .remove("hidden");
+
+    el("loginCard")
+      .classList
+      .add("hidden");
+
+  } else {
+
+    el("loginCard")
+      .classList
+      .remove("hidden");
+
+    el("signupCard")
+      .classList
+      .add("hidden");
+
+  }
+
+  window.scrollTo({
+    top:
+      el("authArea")
+        .offsetTop
+        - 100,
+
+    behavior:
+      "smooth"
+  });
+
+}
+
+// ============================================================
+// SIGNUP
+// ============================================================
+
+el("signupForm")
+.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+    hideMessage(
+      "authMessage"
+    );
+
+    const clubName =
+      value("signupClub")
+      .trim();
+
+    const fullName =
+      value("signupName")
+      .trim();
+
+    const email =
+      value("signupEmail")
+      .trim();
+
+    const password =
+      value("signupPassword");
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await sb
+        .auth
+        .signUp({
+
+          email,
+
+          password,
+
+          options: {
+
+            data: {
+
+              club_name:
+                clubName,
+
+              full_name:
+                fullName
+
+            }
+
+          }
+
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      if (
+        data.session
+      ) {
+
+        setMessage(
+          "authMessage",
+          "Compte créé. Connexion réussie.",
+          "success"
+        );
+
+        await startApp();
+
+      } else {
+
+        setMessage(
+          "authMessage",
+
+          "Compte créé. Vérifie ton adresse e-mail puis connecte-toi.",
+
+          "success"
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+      setMessage(
+        "authMessage",
+        error.message ||
+        "Impossible de créer le compte.",
+        "error"
+      );
+
+    }
+
+  }
+);
+
+// ============================================================
+// LOGIN
+// ============================================================
+
+el("loginForm")
+.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+    hideMessage(
+      "authMessage"
+    );
+
+    try {
+
+      const {
+        error
+      } =
+        await sb
+        .auth
+        .signInWithPassword({
+
+          email:
+            value("loginEmail")
+            .trim(),
+
+          password:
+            value("loginPassword")
+
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      await startApp();
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+      setMessage(
+        "authMessage",
+        error.message ||
+        "Connexion impossible.",
+        "error"
+      );
+
+    }
+
+  }
+);
+
+// ============================================================
+// LOGOUT
+// ============================================================
+
+el("logoutButton")
+.addEventListener(
+  "click",
+  async function() {
+
+    await sb
+      .auth
+      .signOut();
+
+    window.location.reload();
+
+  }
+);
+
+// ============================================================
+// GET PROFILE AVEC RETRY
+// ============================================================
+
+async function loadCurrentProfile() {
+
+  for (
+    let attempt = 0;
+    attempt < 4;
+    attempt++
+  ) {
+
+    const {
+      data,
+      error
+    } =
+      await sb
+      .from("profiles")
+      .select(`
+        *,
+        clubs (
+          id,
+          name,
+          slug,
+          logo_url
+        )
+      `)
+      .eq(
+        "user_id",
+        session.user.id
+      )
+      .maybeSingle();
+
+    if (
+      !error &&
+      data
+    ) {
+
+      currentProfile =
+        data;
+
+      currentClub =
+        data.clubs;
+
+      return;
+
+    }
+
+    await new Promise(
+      resolve =>
+        setTimeout(
+          resolve,
+          600
+        )
+    );
+
+  }
+
+  throw new Error(
+    "Le profil club n'a pas été trouvé."
+  );
+
+}
+
+// ============================================================
+// START APP
+// ============================================================
+
+async function startApp() {
+
+  const {
+    data
+  } =
+    await sb
+    .auth
+    .getSession();
+
+  session =
+    data.session;
+
+  if (!session) {
+
+    el("guestView")
+      .classList
+      .remove("hidden");
+
+    el("appView")
+      .classList
+      .add("hidden");
+
+    el("logoutButton")
+      .classList
+      .add("hidden");
+
+    return;
+
+  }
+
+  try {
+
+    await loadCurrentProfile();
+
+    el("guestView")
+      .classList
+      .add("hidden");
+
+    el("appView")
+      .classList
+      .remove("hidden");
+
+    el("logoutButton")
+      .classList
+      .remove("hidden");
+
+    el("currentClub")
+      .textContent =
+        currentClub?.name ||
+        "";
+
+    await loadAthletes();
+
+    await loadEvaluations();
+
+    await loadDashboard();
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    alert(
+      error.message
+    );
+
+  }
+
+}
+
+// ============================================================
+// TABS
+// ============================================================
+
+document
+.querySelectorAll(
+  ".tab-btn"
+)
+.forEach(
+  button => {
+
+    button
+    .addEventListener(
+      "click",
+      function() {
+
+        const tab =
+          button.dataset.tab;
+
+        document
+        .querySelectorAll(
+          ".tab-btn"
+        )
+        .forEach(
+          b =>
+            b
+            .classList
+            .remove("active")
+        );
+
+        button
+          .classList
+          .add("active");
+
+        document
+        .querySelectorAll(
+          ".tab-section"
+        )
+        .forEach(
+          section =>
+            section
+            .classList
+            .add("hidden")
+        );
+
+        el(
+          "tab-" + tab
+        )
+        .classList
+        .remove("hidden");
+
+      }
+    );
+
+  }
+);
+
+// ============================================================
+// LOAD ATHLETES
+// ============================================================
+
+async function loadAthletes() {
+
+  const {
+    data,
+    error
+  } =
+    await sb
+    .from("athletes")
+    .select("*")
+    .eq(
+      "active",
+      true
+    )
+    .order(
+      "last_name"
+    );
+
+  if (error) {
+    throw error;
+  }
+
+  athletes =
+    data || [];
+
+  renderAthletes();
+
+  refreshAthleteSelect();
+
+}
+
+// ============================================================
+// CREATE ATHLETE
+// ============================================================
+
+el("athleteForm")
+.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+    hideMessage(
+      "athleteMessage"
+    );
+
+    try {
+
+      const payload = {
+
+        club_id:
+          currentProfile.club_id,
+
+        eah_code:
+          "",
+
+        first_name:
+          value(
+            "athleteFirstName"
+          )
+          .trim(),
+
+        last_name:
+          value(
+            "athleteLastName"
+          )
+          .trim(),
+
+        gender:
+          nullable(
+            value(
+              "athleteGender"
+            )
+          ),
+
+        birth_date:
+          nullable(
+            value(
+              "athleteBirthDate"
+            )
+          ),
+
+        public_profile:
+          true
+
+      };
+
+      const {
+        data:
+          createdAthlete,
+
+        error
+      } =
+        await sb
+        .from("athletes")
+        .insert(
+          payload
+        )
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const photo =
+        el(
+          "athletePhoto"
+        )
+        .files[0];
+
+      if (photo) {
+
+        const extension =
+          (
+            photo.name
+            .split(".")
+            .pop()
+            ||
+            "jpg"
+          )
+          .toLowerCase();
+
+        const path =
+          `${currentProfile.club_id}/${createdAthlete.id}/avatar.${extension}`;
+
+        const {
+          error:
+            uploadError
+        } =
+          await sb
+          .storage
+          .from(
+            "avatars"
+          )
+          .upload(
+            path,
+            photo,
+            {
+              upsert:
+                true
+            }
+          );
+
+        if (uploadError) {
+
+          console.warn(
+            uploadError
+          );
+
+        } else {
+
+          const {
+            data:
+              publicData
+          } =
+            sb
+            .storage
+            .from(
+              "avatars"
+            )
+            .getPublicUrl(
+              path
+            );
+
+          await sb
+            .from(
+              "athletes"
+            )
+            .update({
+
+              photo_url:
+                publicData
+                .publicUrl
+
+            })
+            .eq(
+              "id",
+              createdAthlete.id
+            );
+
+        }
+
+      }
+
+      el(
+        "athleteForm"
+      )
+      .reset();
+
+      setMessage(
+        "athleteMessage",
+
+        `Plongeur créé : ${createdAthlete.eah_code}`,
+
+        "success"
+      );
+
+      await loadAthletes();
+
+      await loadDashboard();
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+      setMessage(
+        "athleteMessage",
+        error.message ||
+        "Impossible de créer le plongeur.",
+        "error"
+      );
+
+    }
+
+  }
+);
+
+// ============================================================
+// RENDER ATHLETES
+// ============================================================
+
+function renderAthletes() {
+
+  el(
+    "athleteCount"
+  )
+  .textContent =
+    athletes.length;
+
+  if (
+    athletes.length === 0
+  ) {
+
+    el(
+      "athletesList"
+    )
+    .innerHTML =
+      `<p class="muted">Aucun plongeur pour le moment.</p>`;
+
+    return;
+
+  }
+
+  el(
+    "athletesList"
+  )
+  .innerHTML =
+    athletes
+    .map(
+      athlete => {
+
+        const photo =
+          athlete.photo_url
+          ?
+          `<img
+             class="avatar"
+             src="${safe(athlete.photo_url)}"
+             alt=""
+           >`
+          :
+          `<div class="avatar"></div>`;
+
+        return `
+
+          <div
+            class="athlete-card"
+            style="margin-bottom:12px"
+          >
+
+            ${photo}
+
+            <div class="athlete-info">
+
+              <strong>
+                ${safe(athlete.first_name)}
+                ${safe(athlete.last_name)}
+              </strong>
+
+              <div class="code">
+                ${safe(athlete.eah_code)}
+              </div>
+
+              <div
+                class="inline-actions"
+                style="margin-top:9px"
+              >
+
+                <button
+                  class="btn"
+                  onclick="selectAthleteForEvaluation('${athlete.id}')"
+                >
+                  Évaluer
+                </button>
+
+                <button
+                  class="btn"
+                  onclick="openPublicProfile('${safe(athlete.eah_code)}')"
+                >
+                  Profil
+                </button>
+
+                <button
+                  class="btn"
+                  onclick="copyNfcLink('${safe(athlete.eah_code)}')"
+                >
+                  Copier lien NFC
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    )
+    .join("");
+
+}
+
+// ============================================================
+// ATHLETE SELECT
+// ============================================================
+
+function refreshAthleteSelect() {
+
+  const select =
+    el(
+      "evalAthlete"
+    );
+
+  select.innerHTML =
+    `<option value="">Choisir un plongeur</option>`;
+
+  athletes
+  .forEach(
+    athlete => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        athlete.id;
+
+      option.textContent =
+        `${athlete.first_name} ${athlete.last_name} — ${athlete.eah_code}`;
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+}
+
+function selectAthleteForEvaluation(
+  athleteId
+) {
+
+  el(
+    "evalAthlete"
+  )
+  .value =
+    athleteId;
+
+  document
+    .querySelector(
+      '[data-tab="evaluation"]'
+    )
+    .click();
+
+}
+
+function openPublicProfile(
+  code
+) {
+
+  window.open(
+    makePublicUrl(
+      code
+    ),
+    "_blank"
+  );
+
+}
+
+async function copyNfcLink(
+  code
+) {
+
+  const url =
+    makePublicUrl(
+      code
+    );
+
+  try {
+
+    await navigator
+      .clipboard
+      .writeText(
+        url
+      );
+
+    alert(
+      "Lien NFC copié."
+    );
+
+  } catch {
+
+    prompt(
+      "Copie ce lien :",
+      url
+    );
+
+  }
+
+}
+
+// ============================================================
+// AUTO DIFFICULTE EAH POUR PLONGEON OLYMPIQUE
+// ============================================================
+
+function calculateOlympicEAHDifficulty(
+  dd
+) {
+
+  const n =
+    Number(dd);
+
+  if (
+    !Number.isFinite(n)
+    ||
+    n <= 0
+  ) {
+
+    return null;
+
+  }
+
+  if (n <= 1.6) {
+    return 1;
+  }
+
+  if (n <= 2.3) {
+    return 2;
+  }
+
+  if (n <= 2.8) {
+    return 3;
+  }
+
+  if (n <= 3.2) {
+    return 4;
+  }
+
+  return 5;
+
+}
+
+function autoDifficulty() {
+
+  if (
+    value(
+      "evalDiscipline"
+    )
+    !==
+    "OLYMPIC"
+  ) {
+
+    return;
+
+  }
+
+  const dd =
+    numberOrNull(
+      value(
+        "evalDD"
+      )
+    );
+
+  const difficulty =
+    calculateOlympicEAHDifficulty(
+      dd
+    );
+
+  if (difficulty) {
+
+    el(
+      "evalDifficulty"
+    )
+    .value =
+      String(
+        difficulty
+      );
+
+  }
+
+}
+
+el(
+  "evalDD"
+)
+.addEventListener(
+  "input",
+  autoDifficulty
+);
+
+el(
+  "evalDiscipline"
+)
+.addEventListener(
+  "change",
+  autoDifficulty
+);
+
+// ============================================================
+// SCORE PREVIEW
+// ============================================================
+
+function sumSelectors(
+  className
+) {
+
+  return Array
+  .from(
+    document
+    .querySelectorAll(
+      "." + className
+    )
+  )
+  .reduce(
+    (
+      total,
+      selector
+    ) => {
+
+      return total
+        +
+        Number(
+          selector.value
+        );
+
+    },
+    0
+  );
+
+}
+
+function updateScorePreview() {
+
+  const takeoff =
+    sumSelectors(
+      "takeoff-score"
+    );
+
+  const trick =
+    sumSelectors(
+      "trick-score"
+    );
+
+  const entry =
+    sumSelectors(
+      "entry-score"
+    );
+
+  const total =
+    (
+      takeoff
+      +
+      trick
+      +
+      entry
+    )
+    / 3;
+
+  el(
+    "takeoffPreview"
+  )
+  .textContent =
+    `${takeoff} / 10`;
+
+  el(
+    "trickPreview"
+  )
+  .textContent =
+    `${trick} / 10`;
+
+  el(
+    "entryPreview"
+  )
+  .textContent =
+    `${entry} / 10`;
+
+  el(
+    "eahPreview"
+  )
+  .textContent =
+    `${total.toFixed(1)} / 10`;
+
+}
+
+document
+.querySelectorAll(
+  ".score-input"
+)
+.forEach(
+  input => {
+
+    input
+    .addEventListener(
+      "change",
+      updateScorePreview
+    );
+
+  }
+);
+
+// ============================================================
+// IMPROVEMENT CODES
+// ============================================================
+
+function getImprovementCodes() {
+
+  const ids = [
+
+    "d1",
+    "d2",
+    "d3",
+    "d4",
+    "d5",
+
+    "t1",
+    "t2",
+    "t3",
+    "t4",
+    "t5",
+
+    "e1",
+    "e2",
+    "e3",
+    "e4",
+    "e5"
+
+  ];
+
+  return ids
+    .filter(
+      id =>
+        Number(
+          value(id)
+        )
+        <
+        2
+    )
+    .map(
+      id =>
+        id.toUpperCase()
+    );
+
+}
+
+// ============================================================
+// VIDEO UPLOAD
+// ============================================================
+
+async function uploadEvaluationVideo(
+  athleteId
+) {
+
+  const file =
+    el(
+      "evalVideo"
+    )
+    .files[0];
+
+  if (!file) {
+
+    return null;
+
+  }
+
+  const extension =
+    (
+      file.name
+      .split(".")
+      .pop()
+      ||
+      "mp4"
+    )
+    .toLowerCase();
+
+  const unique =
+    crypto.randomUUID();
+
+  const path =
+    `${currentProfile.club_id}/${athleteId}/${unique}.${extension}`;
+
+  const {
+    error
+  } =
+    await sb
+    .storage
+    .from(
+      "athlete-videos"
+    )
+    .upload(
+      path,
+      file,
+      {
+        upsert:
+          false
+      }
+    );
+
+  if (error) {
+    throw error;
+  }
+
+  return path;
+
+}
+
+// ============================================================
+// SAVE EVALUATION
+// ============================================================
+
+el(
+  "evaluationForm"
+)
+.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+    hideMessage(
+      "evaluationMessage"
+    );
+
+    const athleteId =
+      value(
+        "evalAthlete"
+      );
+
+    if (!athleteId) {
+
+      setMessage(
+        "evaluationMessage",
+        "Choisis un plongeur.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    try {
+
+      setMessage(
+        "evaluationMessage",
+        "Enregistrement en cours..."
+      );
+
+      const videoPath =
+        await uploadEvaluationVideo(
+          athleteId
+        );
+
+      const payload = {
+
+        club_id:
+          currentProfile.club_id,
+
+        athlete_id:
+          athleteId,
+
+        evaluator_id:
+          session.user.id,
+
+        discipline:
+          value(
+            "evalDiscipline"
+          ),
+
+        dive_code:
+          value(
+            "evalDiveCode"
+          )
+          .trim()
+          .toUpperCase(),
+
+        dive_name:
+          nullable(
+            value(
+              "evalDiveName"
+            )
+            .trim()
+          ),
+
+        group_code:
+          numberOrNull(
+            value(
+              "evalGroup"
+            )
+          ),
+
+        support:
+          nullable(
+            value(
+              "evalSupport"
+            )
+          ),
+
+        height_m:
+          numberOrNull(
+            value(
+              "evalHeight"
+            )
+          ),
+
+        height_estimated:
+          el(
+            "evalHeightEstimated"
+          )
+          .checked,
+
+        position:
+          nullable(
+            value(
+              "evalPosition"
+            )
+          ),
+
+        official_dd:
+          numberOrNull(
+            value(
+              "evalDD"
+            )
+          ),
+
+        difficulty_eah:
+          numberOrNull(
+            value(
+              "evalDifficulty"
+            )
+          ),
+
+        band:
+          nullable(
+            value(
+              "evalBand"
+            )
+          ),
+
+        coach_score:
+          numberOrNull(
+            value(
+              "evalCoachScore"
+            )
+          ),
+
+        is_conform:
+          el(
+            "evalConform"
+          )
+          .checked,
+
+        d1:
+          Number(
+            value("d1")
+          ),
+
+        d2:
+          Number(
+            value("d2")
+          ),
+
+        d3:
+          Number(
+            value("d3")
+          ),
+
+        d4:
+          Number(
+            value("d4")
+          ),
+
+        d5:
+          Number(
+            value("d5")
+          ),
+
+        t1:
+          Number(
+            value("t1")
+          ),
+
+        t2:
+          Number(
+            value("t2")
+          ),
+
+        t3:
+          Number(
+            value("t3")
+          ),
+
+        t4:
+          Number(
+            value("t4")
+          ),
+
+        t5:
+          Number(
+            value("t5")
+          ),
+
+        e1:
+          Number(
+            value("e1")
+          ),
+
+        e2:
+          Number(
+            value("e2")
+          ),
+
+        e3:
+          Number(
+            value("e3")
+          ),
+
+        e4:
+          Number(
+            value("e4")
+          ),
+
+        e5:
+          Number(
+            value("e5")
+          ),
+
+        improvement_codes:
+          getImprovementCodes(),
+
+        comments:
+          nullable(
+            value(
+              "evalComments"
+            )
+            .trim()
+          ),
+
+        video_path:
+          videoPath,
+
+        is_public:
+          el(
+            "evalPublic"
+          )
+          .checked
+
+      };
+
+      const {
+        data:
+          evaluation,
+
+        error
+      } =
+        await sb
+        .from(
+          "evaluations"
+        )
+        .insert(
+          payload
+        )
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      const athlete =
+        athletes
+        .find(
+          athlete =>
+            athlete.id
+            ===
+            athleteId
+        );
+
+      try {
+
+        await generateAndUploadGradeReport(
+          evaluation,
+          athlete
+        );
+
+      } catch (
+        pdfError
+      ) {
+
+        console.warn(
+          "PDF :",
+          pdfError
+        );
+
+      }
+
+      try {
+
+        await updateBadgesForAthlete(
+          athleteId
+        );
+
+      } catch (
+        badgeError
+      ) {
+
+        console.warn(
+          "Blasons :",
+          badgeError
+        );
+
+      }
+
+      setMessage(
+        "evaluationMessage",
+
+        `Évaluation enregistrée. Note EAH : ${evaluation.eah_score}/10`,
+
+        "success"
+      );
+
+      el(
+        "evaluationForm"
+      )
+      .reset();
+
+      updateScorePreview();
+
+      refreshAthleteSelect();
+
+      await loadEvaluations();
+
+      await loadDashboard();
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+      setMessage(
+        "evaluationMessage",
+
+        error.message ||
+        "Erreur lors de l'enregistrement.",
+
+        "error"
+      );
+
+    }
+
+  }
+);
+
+// ============================================================
+// PDF GRADE REPORT
+// ============================================================
+
+async function generateAndUploadGradeReport(
+  evaluation,
+  athlete
+) {
+
+  if (
+    !evaluation ||
+    !athlete
+  ) {
+
+    return;
+
+  }
+
+  const {
+    jsPDF
+  } =
+    window.jspdf;
+
+  const doc =
+    new jsPDF({
+
+      unit:
+        "mm",
+
+      format:
+        "a4"
+
+    });
+
+  doc.setFillColor(
+    6,
+    26,
+    51
+  );
+
+  doc.rect(
+    0,
+    0,
+    210,
+    42,
+    "F"
+  );
+
+  doc.setTextColor(
+    255,
+    255,
+    255
+  );
+
+  doc.setFontSize(
+    21
+  );
+
+  doc.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  doc.text(
+    "EAH DIVING",
+    16,
+    19
+  );
+
+  doc.setFontSize(
+    11
+  );
+
+  doc.text(
+    "GRADE REPORT",
+    16,
+    29
+  );
+
+  doc.setTextColor(
+    6,
+    26,
+    51
+  );
+
+  doc.setFontSize(
+    18
+  );
+
+  doc.text(
+    `${athlete.first_name} ${athlete.last_name}`,
+    16,
+    57
+  );
+
+  doc.setFontSize(
+    10
+  );
+
+  doc.setTextColor(
+    0,
+    104,
+    255
+  );
+
+  doc.text(
+    athlete.eah_code,
+    16,
+    65
+  );
+
+  doc.setTextColor(
+    6,
+    26,
+    51
+  );
+
+  doc.setFontSize(
+    11
+  );
+
+  let y =
+    79;
+
+  const lines = [
+
+    [
+      "Club",
+      currentClub?.name || "-"
+    ],
+
+    [
+      "Discipline",
+      evaluation.discipline || "-"
+    ],
+
+    [
+      "Plongeon",
+      evaluation.dive_code || "-"
+    ],
+
+    [
+      "Nom",
+      evaluation.dive_name || "-"
+    ],
+
+    [
+      "Hauteur",
+      evaluation.height_m
+      ?
+      `${evaluation.height_m} m${evaluation.height_estimated ? " estimée" : ""}`
+      :
+      "-"
+    ],
+
+    [
+      "DD",
+      evaluation.official_dd ?? "-"
+    ],
+
+    [
+      "Difficulté EAH",
+      evaluation.difficulty_eah ?? "-"
+    ],
+
+    [
+      "Bande",
+      evaluation.band || "-"
+    ]
+
+  ];
+
+  lines.forEach(
+    row => {
+
+      doc.setFont(
+        "helvetica",
+        "bold"
+      );
+
+      doc.text(
+        row[0] + " :",
+        16,
+        y
+      );
+
+      doc.setFont(
+        "helvetica",
+        "normal"
+      );
+
+      doc.text(
+        String(
+          row[1]
+        ),
+        57,
+        y
+      );
+
+      y +=
+        7;
+
+    }
+  );
+
+  y +=
+    4;
+
+  doc.setFillColor(
+    242,
+    247,
+    255
+  );
+
+  doc.roundedRect(
+    16,
+    y,
+    178,
+    34,
+    4,
+    4,
+    "F"
+  );
+
+  doc.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  doc.setFontSize(
+    11
+  );
+
+  doc.text(
+    `TAKEOFF : ${evaluation.takeoff_score}/10`,
+    24,
+    y + 12
+  );
+
+  doc.text(
+    `TRICK : ${evaluation.trick_score}/10`,
+    78,
+    y + 12
+  );
+
+  doc.text(
+    `ENTRY : ${evaluation.entry_score}/10`,
+    128,
+    y + 12
+  );
+
+  doc.setFontSize(
+    18
+  );
+
+  doc.setTextColor(
+    0,
+    104,
+    255
+  );
+
+  doc.text(
+    `EAH : ${evaluation.eah_score}/10`,
+    24,
+    y + 26
+  );
+
+  y +=
+    46;
+
+  doc.setTextColor(
+    6,
+    26,
+    51
+  );
+
+  doc.setFontSize(
+    11
+  );
+
+  doc.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  doc.text(
+    "Critères à améliorer",
+    16,
+    y
+  );
+
+  y +=
+    8;
+
+  doc.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  doc.text(
+
+    (
+      evaluation
+      .improvement_codes
+      ?.join(", ")
+      ||
+      "Aucun"
+    ),
+
+    16,
+    y
+
+  );
+
+  y +=
+    14;
+
+  doc.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  doc.text(
+    "Commentaire",
+    16,
+    y
+  );
+
+  y +=
+    7;
+
+  doc.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  const comment =
+    evaluation.comments
+    ||
+    "Aucun commentaire.";
+
+  const commentLines =
+    doc.splitTextToSize(
+      comment,
+      178
+    );
+
+  doc.text(
+    commentLines,
+    16,
+    y
+  );
+
+  doc.setFontSize(
+    8
+  );
+
+  doc.setTextColor(
+    110,
+    125,
+    145
+  );
+
+  doc.text(
+    "EAH DIVING — Grade Report",
+    16,
+    286
+  );
+
+  const blob =
+    doc.output(
+      "blob"
+    );
+
+  const path =
+    `${currentProfile.club_id}/${athlete.id}/${evaluation.id}.pdf`;
+
+  const {
+    error:
+      uploadError
+  } =
+    await sb
+    .storage
+    .from(
+      "grade-reports"
+    )
+    .upload(
+      path,
+      blob,
+      {
+        contentType:
+          "application/pdf",
+
+        upsert:
+          true
+      }
+    );
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  const {
+    error:
+      updateError
+  } =
+    await sb
+    .from(
+      "evaluations"
+    )
+    .update({
+
+      grade_report_path:
+        path
+
+    })
+    .eq(
+      "id",
+      evaluation.id
+    );
+
+  if (updateError) {
+    throw updateError;
+  }
+
+}
+
+// ============================================================
+// BLAZONS AUTOMATIQUES
+// ============================================================
+
+async function updateBadgesForAthlete(
+  athleteId
+) {
+
+  const {
+    data,
+    error
+  } =
+    await sb
+    .from(
+      "evaluations"
+    )
+    .select(`
+      id,
+      dive_code,
+      group_code,
+      band,
+      difficulty_eah,
+      eah_score,
+      support
+    `)
+    .eq(
+      "athlete_id",
+      athleteId
+    );
+
+  if (error) {
+    throw error;
+  }
+
+  const list =
+    data || [];
+
+  const distinctDives =
+    new Set(
+      list
+      .map(
+        item =>
+          item.dive_code
+      )
+      .filter(Boolean)
+    )
+    .size;
+
+  const distinctGroups =
+    new Set(
+      list
+      .map(
+        item =>
+          item.group_code
+      )
+      .filter(Boolean)
+    )
+    .size;
+
+  const distinctBands =
+    new Set(
+      list
+      .map(
+        item =>
+          item.band
+      )
+      .filter(Boolean)
+    )
+    .size;
+
+  const score7 =
+    list.filter(
+      item =>
+        Number(
+          item.eah_score
+        )
+        >=
+        7
+    )
+    .length;
+
+  const score8 =
+    list.filter(
+      item =>
+        Number(
+          item.eah_score
+        )
+        >=
+        8
+    )
+    .length;
+
+  const score9 =
+    list.filter(
+      item =>
+        Number(
+          item.eah_score
+        )
+        >=
+        9
+    )
+    .length;
+
+  const difficulty4 =
+    list.filter(
+      item =>
+        Number(
+          item.difficulty_eah
+        )
+        >=
+        4
+    )
+    .length;
+
+  const legendAdvanced =
+    list.filter(
+      item => {
+
+        const score =
+          Number(
+            item.eah_score
+          );
+
+        const difficulty =
+          Number(
+            item.difficulty_eah
+          );
+
+        if (score < 9) {
+
+          return false;
+
+        }
+
+        if (
+          item.support
+          ===
+          "PF"
+        ) {
+
+          return difficulty >= 5;
+
+        }
+
+        return difficulty >= 4;
+
+      }
+    )
+    .length;
+
+  const earned = [];
+
+  // BRONZE
+  if (
+    distinctDives >= 10
+    &&
+    distinctGroups >= 4
+    &&
+    score7 >= 3
+    &&
+    distinctBands >= 2
+  ) {
+
+    earned.push(
+      "BRONZE"
+    );
+
+  }
+
+  // SILVER
+  if (
+    distinctDives >= 20
+    &&
+    distinctGroups >= 7
+    &&
+    score8 >= 2
+    &&
+    score7 >= 10
+    &&
+    distinctBands >= 3
+  ) {
+
+    earned.push(
+      "SILVER"
+    );
+
+  }
+
+  // GOLD
+  if (
+    distinctDives >= 35
+    &&
+    distinctGroups >= 7
+    &&
+    score8 >= 10
+    &&
+    score9 >= 3
+    &&
+    difficulty4 >= 3
+    &&
+    distinctBands >= 3
+  ) {
+
+    earned.push(
+      "GOLD"
+    );
+
+  }
+
+  // LEGEND
+  if (
+    distinctDives >= 50
+    &&
+    distinctGroups >= 7
+    &&
+    score8 >= 30
+    &&
+    score9 >= 10
+    &&
+    legendAdvanced >= 3
+    &&
+    distinctBands >= 3
+  ) {
+
+    earned.push(
+      "LEGEND"
+    );
+
+  }
+
+  for (
+    const badge
+    of earned
+  ) {
+
+    const {
+      error:
+        badgeError
+    } =
+      await sb
+      .from(
+        "athlete_badges"
+      )
+      .upsert(
+
+        {
+
+          club_id:
+            currentProfile.club_id,
+
+          athlete_id:
+            athleteId,
+
+          badge,
+
+          awarded_by:
+            session.user.id
+
+        },
+
+        {
+
+          onConflict:
+            "athlete_id,badge",
+
+          ignoreDuplicates:
+            true
+
+        }
+
+      );
+
+    if (badgeError) {
+
+      console.warn(
+        badgeError
+      );
+
+    }
+
+  }
+
+}
+
+// ============================================================
+// LOAD EVALUATIONS
+// ============================================================
+
+async function loadEvaluations() {
+
+  if (!session) {
+    return;
+  }
+
+  const {
+    data,
+    error
+  } =
+    await sb
+    .from(
+      "evaluations"
+    )
+    .select(`
+      *,
+      athletes (
+        id,
+        eah_code,
+        first_name,
+        last_name
+      )
+    `)
+    .order(
+      "created_at",
+      {
+        ascending:
+          false
+      }
+    );
+
+  if (error) {
+
+    console.error(
+      error
+    );
+
+    return;
+
+  }
+
+  evaluations =
+    data || [];
+
+  renderEvaluationHistory();
+
+}
+
+// ============================================================
+// HISTORY RENDER
+// ============================================================
+
+function renderEvaluationHistory() {
+
+  const body =
+    el(
+      "evaluationsTable"
+    );
+
+  if (
+    evaluations.length
+    ===
+    0
+  ) {
+
+    body.innerHTML = `
+
+      <tr>
+
+        <td colspan="8">
+
+          <span class="muted">
+            Aucune évaluation.
+          </span>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+  body.innerHTML =
+    evaluations
+    .map(
+      evaluation => {
+
+        const athlete =
+          evaluation.athletes;
+
+        return `
+
+          <tr>
+
+            <td>
+              ${formatDate(evaluation.created_at)}
+            </td>
+
+            <td>
+
+              ${safe(athlete?.first_name)}
+
+              ${safe(athlete?.last_name)}
+
+            </td>
+
+            <td>
+              ${safe(evaluation.dive_code)}
+            </td>
+
+            <td>
+              <strong>
+                ${safe(evaluation.eah_score)}/10
+              </strong>
+            </td>
+
+            <td>
+              ${safe(evaluation.takeoff_score)}/10
+            </td>
+
+            <td>
+              ${safe(evaluation.trick_score)}/10
+            </td>
+
+            <td>
+              ${safe(evaluation.entry_score)}/10
+            </td>
+
+            <td>
+
+              <div class="inline-actions">
+
+                ${
+                  evaluation.grade_report_path
+                  ?
+                  `
+                    <button
+                      class="btn"
+                      onclick="openPrivateFile(
+                        'grade-reports',
+                        '${safe(evaluation.grade_report_path)}'
+                      )"
+                    >
+                      PDF
+                    </button>
+                  `
+                  :
+                  ""
+                }
+
+                ${
+                  evaluation.video_path
+                  ?
+                  `
+                    <button
+                      class="btn"
+                      onclick="openPrivateFile(
+                        'athlete-videos',
+                        '${safe(evaluation.video_path)}'
+                      )"
+                    >
+                      Vidéo
+                    </button>
+                  `
+                  :
+                  ""
+                }
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    )
+    .join("");
+
+}
+
+// ============================================================
+// OPEN SIGNED PRIVATE FILE
+// ============================================================
+
+async function openPrivateFile(
+  bucket,
+  path
+) {
+
+  const {
+    data,
+    error
+  } =
+    await sb
+    .storage
+    .from(
+      bucket
+    )
+    .createSignedUrl(
+      path,
+      120
+    );
+
+  if (error) {
+
+    alert(
+      error.message
+    );
+
+    return;
+
+  }
+
+  window.open(
+    data.signedUrl,
+    "_blank"
+  );
+
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+
+async function loadDashboard() {
+
+  el(
+    "metricAthletes"
+  )
+  .textContent =
+    athletes.length;
+
+  el(
+    "metricEvaluations"
+  )
+  .textContent =
+    evaluations.length;
+
+  const {
+    count,
+    error
+  } =
+    await sb
+    .from(
+      "athlete_badges"
+    )
+    .select(
+      "*",
+      {
+        count:
+          "exact",
+
+        head:
+          true
+      }
+    );
+
+  if (!error) {
+
+    el(
+      "metricBadges"
+    )
+    .textContent =
+      count || 0;
+
+  }
+
+}
+
+// ============================================================
+// PUBLIC PROFILE
+// ============================================================
+
+async function loadPublicProfile(
+  code
+) {
+
+  el(
+    "guestView"
+  )
+  .classList
+  .add("hidden");
+
+  el(
+    "appView"
+  )
+  .classList
+  .add("hidden");
+
+  el(
+    "publicProfileView"
+  )
+  .classList
+  .remove("hidden");
+
+  const [
+    athleteResult,
+    evaluationResult,
+    badgeResult
+  ] =
+    await Promise.all([
+
+      sb.rpc(
+        "get_public_athlete",
+        {
+          p_code:
+            code
+        }
+      ),
+
+      sb.rpc(
+        "get_public_evaluations",
+        {
+          p_code:
+            code
+        }
+      ),
+
+      sb.rpc(
+        "get_public_badges",
+        {
+          p_code:
+            code
+        }
+      )
+
+    ]);
+
+  if (
+    athleteResult.error
+  ) {
+
+    console.error(
+      athleteResult.error
+    );
+
+  }
+
+  const athlete =
+    athleteResult
+    .data
+    ?.[0];
+
+  if (!athlete) {
+
+    el(
+      "publicProfileContent"
+    )
+    .innerHTML = `
+
+      <div class="card">
+
+        <h2>
+          Profil introuvable
+        </h2>
+
+        <p class="muted">
+          Aucun profil public EAH ne correspond à ce code.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  const publicEvaluations =
+    evaluationResult.data
+    ||
+    [];
+
+  const badges =
+    badgeResult.data
+    ||
+    [];
+
+  const photo =
+    athlete.photo_url
+    ?
+    `
+      <img
+        class="avatar large"
+        src="${safe(athlete.photo_url)}"
+        alt=""
+      >
+    `
+    :
+    `
+      <div class="avatar large"></div>
+    `;
+
+  let html = `
+
+    <div class="card">
+
+      <div class="public-header">
+
+        ${photo}
+
+        <div>
+
+          <div class="code">
+            ${safe(athlete.eah_code)}
+          </div>
+
+          <h1
+            style="
+              margin:
+                5px
+                0
+                8px;
+            "
+          >
+            ${safe(athlete.first_name)}
+            ${safe(athlete.last_name)}
+          </h1>
+
+          <div class="muted">
+            ${safe(athlete.club_name)}
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+  if (
+    badges.length > 0
+  ) {
+
+    html += `
+
+      <div
+        class="grid grid-3"
+        style="margin-top:18px"
+      >
+
+        ${badges
+          .map(
+            badge => `
+
+              <div class="badge-card">
+
+                <div>
+
+                  <div class="small">
+                    BLAZON EAH
+                  </div>
+
+                  <strong>
+                    ${safe(badge.badge)}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            `
+          )
+          .join("")
+        }
+
+      </div>
+
+    `;
+
+  }
+
+  html += `
+
+    <div
+      class="card"
+      style="margin-top:18px"
+    >
+
+      <h2>
+        Grade history
+      </h2>
+
+  `;
+
+  if (
+    publicEvaluations.length
+    ===
+    0
+  ) {
+
+    html += `
+
+      <p class="muted">
+        Aucune évaluation publique.
+      </p>
+
+    `;
+
+  } else {
+
+    html +=
+      publicEvaluations
+      .map(
+        evaluation => `
+
+          <div class="eval-public">
+
+            <div class="section-title">
+
+              <div>
+
+                <strong>
+                  ${safe(evaluation.dive_code)}
+                </strong>
+
+                <div class="small muted">
+                  ${formatDate(evaluation.created_at)}
+                </div>
+
+              </div>
+
+              <div class="public-score">
+                ${safe(evaluation.eah_score)}
+              </div>
+
+            </div>
+
+            <div class="grid grid-3">
+
+              <div>
+                <strong>
+                  ${safe(evaluation.takeoff_score)}/10
+                </strong>
+                <br>
+                <span class="small muted">
+                  TAKEOFF
+                </span>
+              </div>
+
+              <div>
+                <strong>
+                  ${safe(evaluation.trick_score)}/10
+                </strong>
+                <br>
+                <span class="small muted">
+                  TRICK
+                </span>
+              </div>
+
+              <div>
+                <strong>
+                  ${safe(evaluation.entry_score)}/10
+                </strong>
+                <br>
+                <span class="small muted">
+                  ENTRY
+                </span>
+              </div>
+
+            </div>
+
+            <hr>
+
+            <div class="small">
+
+              <strong>
+                Discipline :
+              </strong>
+
+              ${safe(evaluation.discipline)}
+
+              &nbsp; • &nbsp;
+
+              <strong>
+                Hauteur :
+              </strong>
+
+              ${
+                evaluation.height_m
+                ?
+                `${safe(evaluation.height_m)} m`
+                :
+                "-"
+              }
+
+              &nbsp; • &nbsp;
+
+              <strong>
+                Difficulté EAH :
+              </strong>
+
+              ${safe(evaluation.difficulty_eah ?? "-")}
+
+            </div>
+
+            ${
+              evaluation.improvement_codes
+              ?.length
+              ?
+              `
+
+                <p class="small">
+
+                  <strong>
+                    Critères à améliorer :
+                  </strong>
+
+                  ${safe(
+                    evaluation
+                    .improvement_codes
+                    .join(", ")
+                  )}
+
+                </p>
+
+              `
+              :
+              ""
+            }
+
+            ${
+              evaluation.comments
+              ?
+              `
+
+                <p>
+                  ${safe(evaluation.comments)}
+                </p>
+
+              `
+              :
+              ""
+            }
+
+          </div>
+
+        `
+      )
+      .join("");
+
+  }
+
+  html += `
+
+    </div>
+
+  `;
+
+  el(
+    "publicProfileContent"
+  )
+  .innerHTML =
+    html;
+
+}
+
+// ============================================================
+// INIT
+// ============================================================
+
+async function init() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const publicCode =
+    params.get(
+      "profile"
+    );
+
+  if (
+    publicCode
+  ) {
+
+    await loadPublicProfile(
+      publicCode
+    );
+
+    return;
+
+  }
+
+  const {
+    data
+  } =
+    await sb
+    .auth
+    .getSession();
+
+  session =
+    data.session;
+
+  if (
+    session
+  ) {
+
+    await startApp();
+
+  }
+
+}
+
+// ============================================================
+// AUTH CHANGES
+// ============================================================
+
+sb
+.auth
+.onAuthStateChange(
+  async (
+    event,
+    newSession
+  ) => {
+
+    session =
+      newSession;
+
+    if (
+      event ===
+      "SIGNED_OUT"
+    ) {
+
+      window.location.reload();
+
+    }
+
+  }
+);
+
+init();
+
+</script>
+
+</body>
+
+</html>
